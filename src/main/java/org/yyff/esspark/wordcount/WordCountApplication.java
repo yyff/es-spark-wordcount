@@ -26,8 +26,14 @@ public class WordCountApplication {
                 .set("es.net.http.auth.user", "elastic")
                 .set("es.net.http.auth.pass", password);
 
-        // 3. quering blogs its author is 'Shay Banon' and count words of 'content' field
+        // 3 quering blogs its author is 'Shay Banon' and count words of 'content' field
+        // 3.1 spark sql
         String[] conditions = new String[]{"author=\"Shay Banon\""};
-        new WordCount(sparkConf, "output/wordcount").executeBySQL("blogs", "content", conditions);
+        new WordCount(sparkConf, "output/spark-sql").executeBySQL("blogs", "content", conditions);
+
+        // 3.2 query
+        new WordCount(sparkConf, "output/spark-native").executeByQuery("blogs", "content", "?q=author:\"Shay Banon\"");
+
+
     }
 }
